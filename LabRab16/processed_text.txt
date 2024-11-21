@@ -1,0 +1,19 @@
+Початковий текст:
+
+AI enables machines to perform tasks like decision-making, problem-solving, and learning.
+
+
+Токенізація по словам:
+AI enables machines to perform tasks like decision-making , problem-solving , and learning .
+
+Лемматизація слів:
+AI enables machine to perform task like decision-making , problem-solving , and learning .
+
+Стеммінг слів:
+ai enabl machin to perform task like decision-mak , problem-solv , and learn .
+
+Видалення стоп-слів:
+AI enables machines perform tasks like decision-making , problem-solving , learning .
+
+Видалення пунктуації:
+AI enables machines perform tasks like decision-making problem-solving learning

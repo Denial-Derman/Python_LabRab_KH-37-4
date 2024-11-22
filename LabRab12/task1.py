@@ -55,7 +55,7 @@ def display_data(data):
 
 # Пошук записів за полем
 def search_record(data):
-    field = input("Поле для пошуку (Прізвище, Ім'я, Адреса, Школа, Клас, День): ")
+    field = input("Поле для пошуку  (Прізвище, Ім'я, Адреса, Школа, Клас, День): ")
     value = input(f"Введіть значення для пошуку в полі {field}: ")
     results = [student for student in data if str(student.get(field, "")).lower() == value.lower()]
     display_data(results) if results else print("Записів не знайдено.")

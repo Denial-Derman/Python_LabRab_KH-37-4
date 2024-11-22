@@ -1,127 +1,117 @@
 import json
 
-students  = [
-    {"Прізвище": "Іваненко", "Ім'я": "Іван", "Адреса": "вул. Центральна, 12",
-     "Номер школи": 5, "День відвідування": "субота", "Клас": 7},
-    {"Прізвище": "Петренко", "Ім'я": "Петро", "Адреса": "вул. Київська, 22",
-     "Номер школи": 10, "День відвідування": "неділя", "Клас": 8},
-    {"Прізвище": "Сидоренко", "Ім'я": "Олена", "Адреса": "вул. Грушевського, 10",
-     "Номер школи": 3, "День відвідування": "субота", "Клас": 7},
-    {"Прізвище": "Коваленко", "Ім'я": "Оксана", "Адреса": "вул. Лесі Українки, 5",
-     "Номер школи": 8, "День відвідування": "неділя", "Клас": 9},
-    {"Прізвище": "Шевченко", "Ім'я": "Тарас", "Адреса": "вул. Шевченка, 1",
-     "Номер школи": 7, "День відвідування": "субота", "Клас": 8},
-    {"Прізвище": "Мельник", "Ім'я": "Юрій", "Адреса": "вул. Зелені Пагорби, 20",
-     "Номер школи": 2, "День відвідування": "неділя", "Клас": 11},
-    {"Прізвище": "Гончаренко", "Ім'я": "Марія", "Адреса": "вул. Дружби, 7",
-     "Номер школи": 6, "День відвідування": "субота", "Клас": 8},
-    {"Прізвище": "Романенко", "Ім'я": "Віталій", "Адреса": "вул. Полтавська, 13",
-     "Номер школи": 4, "День відвідування": "неділя", "Клас": 10},
-    {"Прізвище": "Бондаренко", "Ім'я": "Катерина", "Адреса": "вул. Лісова, 19",
-     "Номер школи": 9, "День відвідування": "субота", "Клас": 7},
-    {"Прізвище": "Демченко", "Ім'я": "Олександр", "Адреса": "вул. Набережна, 8",
-     "Номер школи": 1, "День відвідування": "неділя", "Клас": 11}
+students = [
+    {"Прізвище": "Завдов'єв", "Ім'я": "Денис", "Адреса": "пр. Лушпи, 18", "Школа": 17, "Клас": 9, "День": "субота"},
+    {"Прізвище": "Петренко", "Ім'я": "Петро", "Адреса": "вул. Лесі Українки, 25", "Школа": 7, "Клас": 9, "День": "неділя"},
+    {"Прізвище": "Сидоренко", "Ім'я": "Оксана", "Адреса": "пр. Лушпи, 18", "Школа": 17, "Клас": 7, "День": "субота"},
+    {"Прізвище": "Ковальчук", "Ім'я": "Олег", "Адреса": "вул. Лесі Українки, 25", "Школа": 7, "Клас": 7, "День": "субота"},
+    {"Прізвище": "Гончаренко", "Ім'я": "Анна", "Адреса": "пр. Лушпи, 18", "Школа": 17, "Клас": 8, "День": "неділя"},
+    {"Прізвище": "Іваненко", "Ім'я": "Іван", "Адреса": "вул. Герасима Кондратьєва, 136", "Школа": 1, "Клас": 10, "День": "неділя"},
+    {"Прізвище": "Петренко", "Ім'я": "Петро", "Адреса": "пр. Лушпи, 18", "Школа": 17, "Клас": 9, "День": "субота"},
+    {"Прізвище": "Сидоренко", "Ім'я": "Оксана", "Адреса": "вул. Герасима Кондратьєва, 136", "Школа": 1, "Клас": 8, "День": "неділя"},
+    {"Прізвище": "Ковальчук", "Ім'я": "Олег", "Адреса": "вул. Герасима Кондратьєва, 136", "Школа": 1, "Клас": 10, "День": "неділя"},
+    {"Прізвище": "Гончаренко", "Ім'я": "Анна", "Адреса": "пр. Лушпи, 36", "Школа": 23, "Клас": 8, "День": "субота"}
 ]
 
-# Ім'я JSON файлу для результатів
-RESULT_FILE_NAME = "result.json"
+# Збереження початкових даних у файл
+def save_data_to_json(json_file_name, data):
+    with open(json_file_name, "wt") as file:
+        json.dump(data, file)
 
+# Завантаження даних із JSON-файлу
+def load_data(json_file_name):
+    with open(json_file_name, "rt") as file:
+        return json.load(file)
 
-def load_data():
-    return students.copy()
+# Додавання нового запису
+def add_record(json_file_name, data):
+    new_student = {
+        "Прізвище": input("Прізвище: "),
+        "Ім'я": input("Ім'я: "),
+        "Адреса": input("Адреса: "),
+        "Школа": int(input("Номер школи: ")),
+        "Клас": int(input("Клас: ")),
+        "День": input("День відвідування (субота/неділя): ").lower()
+    }
+    data.append(new_student)
+    save_data_to_json(json_file_name, data)
+    print("Новий запис додано.")
 
-
-def save_data(file_name, data):
-    with open(file_name, 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4)
-
-
-def display_data(data):
-    if not data:
-        print("Дані відсутні.")
-    else:
-        for idx, student in enumerate(data, start=1):
-            print(f"{idx}. {student}")
-
-def add_record(data):
-    surname = input("Прізвище: ")
-    name = input("Ім'я: ")
-    address = input("Адреса: ")
-    school_number = input("Номер школи: ")
-    visit_day = input("День відвідування (субота/неділя): ")
-    grade = int(input("Клас (7-11): "))
-
-    data.append({
-        "Прізвище": surname,
-        "Ім'я": name,
-        "Адреса": address,
-        "Номер школи": school_number,
-        "День відвідування": visit_day,
-        "Клас": grade
-    })
-    print("Запис додано!")
-
-
-def remove_record(data):
+# Видалення запису
+def remove_record(json_file_name, data):
     display_data(data)
     idx = int(input("Введіть номер запису для видалення: ")) - 1
     if 0 <= idx < len(data):
         removed = data.pop(idx)
-        print(f"Видалено запис: {removed}")
+        save_data_to_json(json_file_name, data)
+        print(f"Запис видалено: {removed}")
     else:
         print("Некоректний номер запису.")
 
+# Виведення даних
+def display_data(data):
+    for idx, student in enumerate(data):
+        print(f"{idx}. {student}")
 
+# Пошук записів за полем
 def search_record(data):
-    field = input("Введіть поле для пошуку (Прізвище, Ім'я, Адреса, Номер школи, День відвідування, Клас): ")
+    field = input("Поле для пошуку (Прізвище, Ім'я, Адреса, Школа, Клас, День): ")
     value = input(f"Введіть значення для пошуку в полі {field}: ")
-
     results = [student for student in data if str(student.get(field, "")).lower() == value.lower()]
-    if results:
-        print("Знайдені записи:")
-        display_data(results)
-    else:
-        print("Нічого не знайдено.")
+    display_data(results) if results else print("Записів не знайдено.")
 
-
-def solve_task(data):
-    print("Завдання: \nВизначити прізвище, ім'я та адресу учнів, що навчаються у молодших (7-8) класах та відвідують гурток по суботах.")
+# Розв'язання задачі
+def solve_task(data, results_json):
+    print( "Завдання: \nВизначити прізвище, ім'я та адресу учнів, "
+           "що навчаються у молодших (7-8) класах та відвідують гурток по суботах.")
     results = [
-        {
-            "Прізвище": student["Прізвище"],
-            "Ім'я": student["Ім'я"],
-            "Адреса": student["Адреса"]
-        }
-        for student in data
-        if student["Клас"] in [7, 8] and student["День відвідування"].lower() == "субота"
+        {"Прізвище": student["Прізвище"], "Ім'я": student["Ім'я"], "Адреса": student["Адреса"]}
+        for student in data if student["Клас"] in [7, 8] and student["День"] == "субота"
     ]
-    save_data(RESULT_FILE_NAME, results)
-    print(f"Результат збережено у файл {RESULT_FILE_NAME}.")
-    print(f"Результат з файлу:")
-    display_data(results)
+    # Запис результатів у JSON файл
+    with open(results_json, "wt") as file:
+        json.dump(results, file)
+
+    print(f"Результати збережено у файл {results_json}.")
+
+    with open(results_json, "rt") as file:
+        saved_results = json.load(file)
+
+    # Виведення результатів
+    print("\nРезультат завдання (учні 7-8 класів, які відвідують гурток по суботах):")
+    display_data(saved_results)
 
 
-data = load_data()
+# Ім'я файлу для збереження даних
+students_json = "students.json"
+results_json = "results.json"
+
+# Збереження перших даних
+save_data_to_json(students_json, students)
+print("\nВсі початкові дані збережено у фал students_json.")
+
+# Завантаження даних для перевірки
+students_data = load_data(students_json)
 
 while True:
     print("\nМеню:")
-    print("1. Вивести дані")
-    print("2. Додати запис")
-    print("3. Видалити запис")
-    print("4. Знайти запис")
-    print("5. Розв'язати задачу за варіантом")
-    print("0. Вийти")
+    print("1) Вивести дані")
+    print("2) Додати запис")
+    print("3) Видалити запис")
+    print("4) Знайти запис")
+    print("5) Виконати завдання Варіант 6")
+    print("0) Вийти")
     choice = input("Виберіть опцію: ")
     if choice == "1":
-        display_data(data)
+        display_data(students_data)
     elif choice == "2":
-        add_record(data)
+        add_record(students_json, students_data)
     elif choice == "3":
-        remove_record(data)
+        remove_record(students_json, students_data)
     elif choice == "4":
-        search_record(data)
+        search_record(students_data)
     elif choice == "5":
-        solve_task(data)
+        solve_task(students_data, results_json)
     elif choice == "0":
         print("Програма завершена.")
         break

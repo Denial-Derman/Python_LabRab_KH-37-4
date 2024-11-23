@@ -1,126 +1,87 @@
-import numpy as np
-from scipy.integrate import quad
-from scipy.optimize import fsolve, minimize
+from scipy.integrate import quad, solve_ivp
+from scipy.optimize import minimize
 from scipy.linalg import solve
-from scipy.interpolate import interp1d
-from format_utils import format_number  # Імпортуємо функцію форматування
+import numpy as np
+from format_utils import format_number
 
 
-# Задача 1: Чисельне інтегрування
-def integrate_function():
-    # Введення функції користувачем
-    func_input = input("Введіть функцію для інтегрування, використовуючи 'x' як змінну (наприклад, 'x**2 + 3*x + 1'): ")
+# Чисельне інтегрування
+def numerical_integration():
+    print("\n<*> Чисельне інтегрування <*>")
+    print("Функція: f(x) = sin(x)")
+    print("Інтервал: [0, π]")
 
-    # Перетворюємо рядок на функцію через eval
+    def f(x):
+        return np.sin(x)
+
     try:
-        func = lambda x: eval(func_input)
-    except:
-        print("Некоректно введена функція.")
-        return
-
-    # Введення меж інтегрування
-    a = float(input("Введіть нижню межу інтегрування: "))
-    b = float(input("Введіть верхню межу інтегрування: "))
-
-    # Інтегрування функції на відрізку [a, b]
-    result, error = quad(func, a, b)
-
-    # Форматування результату та похибки
-    result_str = format_number(result)
-    error_str = format_number(error)
-
-    print(f"Інтеграл від {a} до {b} дорівнює {result_str}, похибка: {error_str}")
+        result, error = quad(f, 0, np.pi)
+        print(f"Результат інтегрування: {format_number(result)}")
+        print(f"Оцінка похибки: {format_number(error)}")
+    except Exception as e:
+        print(f"Помилка під час обчислення інтегралу: {e}")
 
 
-# Задача 2: Розв'язок нелінійного рівняння
-def solve_equation():
-    # Введення коефіцієнтів для рівняння
-    a = float(input("Введіть коефіцієнт a для рівняння ax^3 + bx + c = 0: "))
-    b = float(input("Введіть коефіцієнт b для рівняння ax^3 + bx + c = 0: "))
-    c = float(input("Введіть коефіцієнт c для рівняння ax^3 + bx + c = 0: "))
-
-    def equation(x):
-        return a * x ** 3 + b * x + c  # Нелінійне рівняння
-
-    # Введення початкового наближення
-    x0 = float(input("Введіть початкове наближення для рівняння: "))
-
-    # Розв'язок рівняння за допомогою fsolve
-    solution = fsolve(equation, x0)
-
-    # Форматування результату
-    solution_str = format_number(solution[0])
-
-    print(f"Розв'язок рівняння: x = {solution_str}")
-
-
-# Задача 3: Мінімізація функції
-def minimize_function():
-    # Введення коефіцієнтів для функції
-    a = float(input("Введіть коефіцієнт a для функції ax^2 + bx + c: "))
-    b = float(input("Введіть коефіцієнт b для функції ax^2 + bx + c: "))
-    c = float(input("Введіть коефіцієнт c для функції ax^2 + bx + c: "))
+# Пошук мінімуму функції
+def find_minimum():
+    print("\n<*> Пошук мінімуму функції <*>")
+    print("Функція: f(x, y) = x^2 + y^2")
 
     def func(x):
-        return a * x ** 2 + b * x + c  # Функція для мінімізації
+        return x[0] ** 2 + x[1] ** 2
 
-    # Введення початкового значення для мінімізації
-    x0 = float(input("Введіть початкове значення для мінімізації: "))
+    initial_guess = [1, 1]
 
-    # Мінімізація функції
-    result = minimize(func, x0)
+    try:
+        # BFGS квазі-Ньютонів метод оптимізації.
+        result = minimize(func, initial_guess, method='BFGS')
+        x_min = format_number(result.x[0])
+        y_min = format_number(result.x[1])
+        fun_min = format_number(result.fun)
+        print(f"Мінімум функції знаходиться в точці: ({x_min}, {y_min})")
+        print(f"Значення функції у мінімумі: {fun_min}")
+    except Exception as e:
+        print(f"Помилка під час пошуку мінімуму: {e}")
 
-    # Форматування результату
-    result_str = format_number(result.x[0])
 
-    print(f"Мінімум функції досягається при x = {result_str}")
-
-
-# Задача 4: Розв'язання системи лінійних рівнянь
+# Розв'язання системи лінійних рівнянь
 def solve_linear_system():
-    n = int(input("Введіть кількість рівнянь у системі: "))
+    print("\n<*> Розв'язання системи лінійних рівнянь <*>")
+    print("Система рівнянь: ")
+    print("| 2x + y = 5")
+    print("| x + 3y = 7")
 
-    # Введення коефіцієнтів системи
-    A = []
-    for i in range(n):
-        row = list(map(float, input(f"Введіть коефіцієнти {i + 1}-го рівняння через пробіл: ").split()))
-        A.append(row)
+    A = [[2, 1], [1, 3]]
+    b = [5, 7]
 
-    B = []
-    for i in range(n):
-        B.append(float(input(f"Введіть праву частину {i + 1}-го рівняння: ")))
-
-    A = np.array(A)
-    B = np.array(B)
-
-    # Розв'язок системи лінійних рівнянь
-    solution = solve(A, B)
-
-    # Форматування результатів
-    solution_str = [format_number(s) for s in solution]
-
-    print("Розв'язок системи лінійних рівнянь:", solution_str)
+    try:
+        solution = solve(A, b)
+        x_sol = format_number(solution[0])
+        y_sol = format_number(solution[1])
+        print(f"Розв'язок системи: x = {x_sol}, y = {y_sol}")
+    except Exception as e:
+        print(f"Помилка під час розв'язання системи рівнянь: {e}")
 
 
-# Задача 5: Інтерполяція Лагранжа
-def lagrange_interpolation():
-    n = int(input("Введіть кількість точок для інтерполяції: "))
+# Чисельне розв'язання диференціального рівняння
+def solve_differential_equation():
+    print("\n<*> Чисельне розв'язання диференціального рівняння <*>")
+    print("Рівняння: y' = -2y")
+    print("Початкова умова: y(0) = 1")
+    print("Інтервал: [0, 5]")
 
-    x_points = []
-    y_points = []
-    for i in range(n):
-        x, y = map(float, input(f"Введіть координати {i + 1}-ї точки (x, y): ").split())
-        x_points.append(x)
-        y_points.append(y)
+    def dydx(t, y):
+        return -2 * y
 
-    # Створення інтерполяційної функції
-    f = interp1d(x_points, y_points, kind='linear')
+    y0 = [1]
+    t_span = (0, 5)
 
-    # Введення точки для інтерполяції
-    x_new = float(input("Введіть точку для інтерполяції: "))
-    y_new = f(x_new)
-
-    # Форматування результату
-    y_new_str = format_number(y_new)
-
-    print(f"Інтерпольоване значення в точці {x_new} = {y_new_str}")
+    try:
+        solution = solve_ivp(dydx, t_span, y0, t_eval=[0, 1, 2, 3, 4, 5])
+        print("Розв'язок рівняння:")
+        for t, y in zip(solution.t, solution.y[0]):
+            t_formatted = format_number(t)
+            y_formatted = format_number(y)
+            print(f"t = {t_formatted}, y = {y_formatted}")
+    except Exception as e:
+        print(f"Помилка під час розв'язання диференціального рівняння: {e}")

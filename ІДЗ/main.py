@@ -1,30 +1,29 @@
-import tasks
-import utils
+from tasks import numerical_integration, find_minimum, solve_linear_system, solve_differential_equation
 
-print("Ласкаво просимо до програми для розв'язування задач з чисельними методами!")
+print("\n>>* Програма для розв’язання задач чисельними методами з використанням SciPy *<<")
+print("( В програмі наведені вже готові приклади )")
+
 while True:
-    print("\nВиберіть задачу:")
-    print("1. Чисельне інтегрування")
-    print("2. Розв'язок нелінійного рівняння")
-    print("3. Мінімізація функції")
-    print("4. Розв'язок системи лінійних рівнянь")
-    print("5. Інтерполяція Лагранжа")
-    print("0. Вихід")
+    print("\n<*> Меню <*>")
+    print("1. Чисельне інтегрування <")
+    print("2. Пошук мінімуму функції <")
+    print("3. Розв'язання системи лінійних рівнянь <")
+    print("4. Чисельне розв'язання диференціального рівняння <")
+    print("0. Вийти з програми <")
 
-    choice = int(input("Введіть номер задачі: "))
+    choice = input("Введіть номер методу: ").strip()
 
-    if choice == 1:
-        tasks.integrate_function()
-    elif choice == 2:
-        tasks.solve_equation()
-    elif choice == 3:
-        tasks.minimize_function()
-    elif choice == 4:
-        tasks.solve_linear_system()
-    elif choice == 5:
-        tasks.lagrange_interpolation()
-    elif choice == 0:
-        print("До побачення!")
+    # Вибір задачі
+    if choice == "1":
+        numerical_integration()
+    elif choice == "2":
+        find_minimum()
+    elif choice == "3":
+        solve_linear_system()
+    elif choice == "4":
+        solve_differential_equation()
+    elif choice == "0":
+        print("Програма завершена. Дякую за використання!")
         break
     else:
-        print("Некоректний вибір, спробуйте ще раз.")
+        print("Невірний вибір, спробуйте ще раз.")

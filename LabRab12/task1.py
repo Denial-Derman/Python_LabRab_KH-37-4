@@ -82,7 +82,7 @@ def solve_task(data, results_json):
     # Виведення результатів
     print("\nРезультат завдання (учні 7-8 класів, які відвідують гурток по суботах):")
     if "students" in saved_results:
-        display_data(saved_results["students"])  # Передається список студентів
+        display_data(saved_results["students"])
     else:
         print("Результати не знайдено у файлі.")
 

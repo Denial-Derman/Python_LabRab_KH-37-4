@@ -15,13 +15,14 @@ students = [
 
 # Збереження початкових даних у файл
 def save_data_to_json(json_file_name, data):
-    with open(json_file_name, "wt") as file:
-        json.dump(data, file)
+    with open(json_file_name, "wt", encoding="utf-8") as file:
+        json_string = json.dumps({"students": data}, ensure_ascii=False, indent=4)
+        file.write(json_string)
 
 # Завантаження даних із JSON-файлу
 def load_data(json_file_name):
-    with open(json_file_name, "rt") as file:
-        return json.load(file)
+    with open(json_file_name, "rt", encoding="utf-8") as file:
+        return json.load(file)["students"]
 
 # Додавання нового запису
 def add_record(json_file_name, data):
@@ -55,7 +56,7 @@ def display_data(data):
 
 # Пошук записів за полем
 def search_record(data):
-    field = input("Поле для пошуку  (Прізвище, Ім'я, Адреса, Школа, Клас, День): ")
+    field = input("Поле для пошуку (Прізвище, Ім'я, Адреса, Школа, Клас, День): ")
     value = input(f"Введіть значення для пошуку в полі {field}: ")
     results = [student for student in data if str(student.get(field, "")).lower() == value.lower()]
     display_data(results) if results else print("Записів не знайдено.")
@@ -68,18 +69,22 @@ def solve_task(data, results_json):
         {"Прізвище": student["Прізвище"], "Ім'я": student["Ім'я"], "Адреса": student["Адреса"]}
         for student in data if student["Клас"] in [7, 8] and student["День"] == "субота"
     ]
-    # Запис результатів у JSON файл
-    with open(results_json, "wt") as file:
-        json.dump(results, file)
+    ## Запис результатів у JSON файл
+    with open(results_json, "wt", encoding="utf-8") as file:
+        json_string = json.dumps({"students": results}, ensure_ascii=False, indent=4)
+        file.write(json_string)
 
     print(f"Результати збережено у файл {results_json}.")
 
-    with open(results_json, "rt") as file:
+    with open(results_json, "rt", encoding="utf-8") as file:
         saved_results = json.load(file)
 
     # Виведення результатів
     print("\nРезультат завдання (учні 7-8 класів, які відвідують гурток по суботах):")
-    display_data(saved_results)
+    if "students" in saved_results:
+        display_data(saved_results["students"])  # Передається список студентів
+    else:
+        print("Результати не знайдено у файлі.")
 
 
 # Ім'я файлу для збереження даних
